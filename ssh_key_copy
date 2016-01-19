@@ -1,0 +1,15 @@
+- hosts: suse 
+
+  tasks:
+  - name: stat dir
+    stat: path=/home/mnguyen/.ssh/authorized_keys
+    register: stat_dir
+  - name: remove dir
+    command: rm -rf /home/mnguyen/.ssh/authorized_keys
+    when: stat_dir.stat.exists
+  - name: upload key
+    action: copy src=/home/mnguyen/.ssh/id_rsa.pub 
+      dest=/home/mnguyen/.ssh/
+      owner=mnguyen group=users mode=644
+  - name: Rename file
+    command: mv /home/mnguyen/.ssh/id_rsa.pub /home/mnguyen/.ssh/authorized_keys
