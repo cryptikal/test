@@ -1,8 +1,19 @@
 - hosts: all
  
-  task:
-  - name: Install Apache
+  tasks:
+  - name: Install Apache CentOS
     yum: name=httpd state=installed
+    when: ansible_os_family == "CentOS"
 
   - name: Start apache
     service: name=httpd state=started
+    when: ansible_os_family == "CentOS"
+
+  - name: Install Apache SuSE
+    zypper: name=apache2 state=present
+    when: ansible_os_family == "Suse"
+
+  - name: Start apache
+    service: name=apache2 state=started
+    when: ansible_os_family == "Suse"
+
